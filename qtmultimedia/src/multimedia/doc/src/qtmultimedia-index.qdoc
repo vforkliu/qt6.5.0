@@ -1,0 +1,209 @@
+// Copyright (C) 2021 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+
+/*!
+    \page qtmultimedia-index.html
+    \title Qt Multimedia
+    \image noun_Media_166644.svg "image of multimedia icons, courtesy of misirlou from the Noun Project"
+    \brief The Qt Multimedia module provides APIs for playing back and recording
+    audiovisual content
+
+    Qt Multimedia is an add-on module that provides a rich set of QML types
+    and C++ classes to handle multimedia content. It contains an easy to use
+    API for playing back audio and video files and rendering those on screen, as
+    well as a comprehensive API for recording audio and video from the system's
+    cameras and microphones.
+
+    The functionality of this module is divided into the following submodules:
+
+    \table
+     \row
+      \li \l{Multimedia Overview}{Qt Multimedia}
+      \li Provides an API for multimedia-specific use cases.
+     \row
+      \li \l{Qt Multimedia Widgets}
+      \li Provides a widget-based multimedia API.
+    \row
+      \li \l{Qt Spatial Audio}
+      \li (Technology Preview)
+          Provides an API for implementing sound fields in 3D space.
+    \endtable
+
+    \section1 Getting started
+    If you are porting from Qt 5 to Qt 6 see \l{Changes to Qt Multimedia}.
+
+    If you are new to Qt Multimedia, the QML types can be
+    \l{qtqml import syntax}{imported} into an application using the following
+    statement in your \c {.qml} file.
+
+    \qml
+     import QtMultimedia
+    \endqml
+
+    To link against the C++ libraries, add the following to your project's
+    \c CMakeLists.txt file. Substitute \c my_project with the name of your
+    project.
+
+   \code
+        find_package(Qt6 REQUIRED COMPONENTS Multimedia)
+        target_link_libraries(my_project PRIVATE Qt6::Multimedia)
+   \endcode
+
+    \section1 Overviews and Important Topics
+
+     \list
+      \li \l{Changes to Qt Multimedia}{Changes in Qt 6}
+      \li \l{Multimedia Overview}
+      \li \l{Audio Overview}
+      \li \l{Spatial Audio Overview} (Technology Preview)
+      \li \l{Video Overview}
+      \li \l{Camera Overview}
+      \li \l{Supported Media Formats}
+     \endlist
+
+    \section1 QML Types
+
+    The following table outlines some important QML types.
+
+    \table
+    \header
+     \li Type
+     \li Description
+    \row
+     \li \l{MediaPlayer}
+     \li Add audio/video playback functionality to a scene.
+    \row
+     \li \l {QtMultimedia::CaptureSession}{CaptureSession}
+     \li Create a session for capturing audio/video.
+    \row
+     \li \l {QtMultimedia::Camera}{Camera}
+     \li Access a camera connected to the system.
+    \row
+     \li \l {QtMultimedia::AudioInput}{AudioInput}
+     \li Access an audio input (microphone) connected to the system.
+    \row
+     \li \l {QtMultimedia::AudioOutput}{AudioOutput}
+     \li Access an audio output (speaker, headphone) connected to the system.
+    \row
+     \li \l {QtMultimedia::VideoOutput}{VideoOutput}
+     \li Display video content.
+    \row
+     \li \l {QtMultimedia::MediaRecorder}{MediaRecorder}
+     \li Record audio/video from the CaptureSession.
+    \row
+     \li \l {QtMultimedia::ImageCapture}{ImageCapture}
+     \li Capture still images from the Camera.
+    \row
+     \li \l {QtMultimedia::Video}{Video}
+     \li Add Video playback functionality to a scene. Uses MediaPlayer and
+     VideoOutput types to provide video playback functionality.
+    \endtable
+
+    \section1 C++ Classes
+
+    The following table outlines some important C++ Classes
+
+    \table
+    \header
+     \li Class
+     \li Description
+    \row
+     \li QMediaPlayer
+     \li Playback media from a source.
+    \row
+     \li QVideoWidget
+     \li Display video from a media player or a capture session.
+    \row
+     \li QMediaCaptureSession
+     \li Capture audio and video.
+    \row
+     \li QCamera
+     \li Access a camera connected to the system
+    \row
+     \li QAudioInput
+     \li Access an audio input (microphone) connected to the system.
+    \row
+     \li QAudioOutput
+     \li Access an audio output (speaker, headphone) connected to the system.
+    \row
+     \li QImageCapture
+     \li Capture still images with a camera.
+    \row
+     \li QMediaRecorder
+     \li Record media content from a capture session.
+    \row
+     \li QVideoSink
+     \li Access and render individual video frames.
+    \row
+     \li QAudioSink
+     \li Sends raw audio data to an audio output device.
+    \endtable
+
+    For playback QMediaPlayer, QAudioOutput and QVideoOutput contain all the required functionality.
+    The other classes are used for capturing audio and video content, where the QMediaCaptureSession is the central
+    class managing the whole capture/recording process.
+
+    \section1 Licenses and Attributions
+
+    The Qt Multimedia module is available under commercial licenses from
+    \l{The Qt Company}.
+    In addition, it is available under free software licenses. Since Qt 5.6,
+    these free software licenses are
+    \l{GNU Lesser General Public License, version 3}, or
+    the \l{GNU General Public License, version 2}.
+    See \l{Qt Licensing} for further details.
+
+    The FFmpeg backend uses the \l {https://ffmpeg.org}{FFmpeg framework}. FFmpeg is licensed under
+    LGPLv2.1, GPLv2, or later versions of the licenses. Some optional components of FFmpeg are only
+    available under GPL. The FFmpeg backend shipped with the Qt binary packages is configured to not
+    contain any of the components that are available under GPLv2 only.
+    See the \l {https://ffmpeg.org/legal.html}{FFmpeg licensing page} for further details.
+
+    \section1 Target platform and backend notes
+
+    On most platforms, there are two different backends that can be used for Qt Multimedia.
+
+    In Qt 6.5, we're setting \l {http://ffmpeg.org}{FFmpeg framework} as the default backend on
+    Windows, macOS, Android, and Linux except Yocto distribution. Native backends, namely gstreamer on Linux,
+    AVFoundation on macOS, WMF on Windows, and the MediaCodec framework on Android,
+    were the default in 6.4. These are still available but with limited support.
+    This means that we will strive to fix critical issues with the native backends, but don't
+    guarantee fixing minor issues and won't implement new features with native backends.
+    Furthermore, even some major issues with the gstreamer backend (on Linux) won't be fixed
+    since gstreamer is the hardest for debugging and is dependent on linux distributives issues.
+
+    We aim to align the behavior on all the platforms, especially, with the ffmpeg backend.
+    Despite this fact we still have platform-dependent issues with formats, codecs, advanced camera
+    features, and screen capturing. This happens since we use some platform API anyway, even with ffmpeg,
+    and there are specific problems with ffmpeg hardware acceleration, mostly on Linux run on ARM architectures.
+    Known backend-dependent limitations will be documented in the respective classes and methods.
+
+    In the case of issues with the default ffmpeg backend, we suggest testing with a native backend.
+    You can switch to native backends by setting the \c{QT_MEDIA_BACKEND} environment variable
+    to \c windows, \c gstreamer (on Linux), \c darwin (on macOS), or \c android:
+
+    \code
+    export QT_MEDIA_BACKEND=darwin
+    \endcode
+
+    In order to force assign ffmpeg as the used backend, set the variable to ffmpeg:
+
+    \code
+    export QT_MEDIA_BACKEND=ffmpeg
+    \endcode
+
+    On the Qt Multimedia compilation stage the default media backend can be configured
+    via cmake variable \c{QT_DEFAULT_MEDIA_BACKEND}.
+
+    \list
+      \li \l{Qt Multimedia on macOS and iOS}{macOS and iOS}
+      \li \l{Qt Multimedia on WebAssembly}{WebAssembly}
+    \endlist
+
+    \section1 Reference and Examples
+    \list
+      \li \l{Qt Multimedia QML Types}{QML Types}
+      \li \l{Qt Multimedia C++ Classes}{C++ Classes}
+      \li \l{Qt Multimedia Examples}{Examples}
+    \endlist
+*/

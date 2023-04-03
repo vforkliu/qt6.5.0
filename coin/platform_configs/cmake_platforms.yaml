@@ -1,0 +1,266 @@
+Version: 2
+Include: [
+    cmake_platforms_qemu.yaml,
+    cmake_platforms_qemu_qnx710.yaml,
+    cmake_platforms_target_android.yaml,
+    cmake_platforms_wasm.yaml,
+    macos.yaml
+    ]
+Configurations:
+-
+    Id: 'ubuntu-22.04-documentation'
+    Template: 'qtci-linux-Ubuntu-22.04-x86_64-51'
+    Compiler: 'GCC'
+    Features: ['Sccache', 'Documentation', 'TestDocs', 'UseConfigure']
+    Configure arguments: '-make examples -developer-build -c++std c++20 -linker gold -no-warnings-are-errors -qtlibinfix TestInfix -qtnamespace TestNamespace'
+    Environment variables: ['NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR}}']
+-
+    Id: 'ubuntu-22.04'
+    Template: 'qtci-linux-Ubuntu-22.04-x86_64-51'
+    Compiler: 'GCC'
+    Features: ['Sccache', 'UseConfigure']
+    Configure arguments: '-nomake examples -release -force-debug-info -separate-debug-info -headersclean -qt-libjpeg -qt-libpng -qt-pcre -qt-harfbuzz -qt-doubleconversion -no-libudev -bundled-xcb-xinput'
+    Environment variables: [
+        'CMAKE_ARGS=-DOpenGL_GL_PREFERENCE=LEGACY',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR}}'
+    ]
+-
+    Id: 'opensuse-15.4-developer-build'
+    Template: 'qtci-linux-openSUSE-15.4-x86_64-50'
+    Compiler: 'GCC'
+    Features: ['Sccache', 'WarningsAreErrors', 'UseConfigure']
+    Configure arguments: '-nomake examples -developer-build'
+    Environment variables: [
+        'PATH={{.Env.CMAKE_MIN_SUPPORTED_BIN_PATH}}:{{.Env.PATH}}',
+        'CONAN_PROFILE=coin/conan/profiles/ci-linux-x86_64-gcc-debug-developer',
+        'CMAKE_ARGS=-DOPENSSL_ROOT_DIR={{.Env.OPENSSL_HOME}}',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR}}'
+    ]
+-
+    Id: 'sles-15_sp4-static'
+    Template: 'qtci-linux-SLES-15_SP4-x86_64-50'
+    Compiler: 'GCC'
+    Features: ['Sccache', 'DisableTests', 'UseConfigure']
+    Configure arguments: '-nomake examples -static -no-sql-mysql'
+    Environment variables: [
+        'CMAKE_ARGS=-DOPENSSL_ROOT_DIR={{.Env.OPENSSL_HOME}}',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR}}'
+    ]
+-
+    Id: 'windows-10_22h2-msvc2019'
+    Template: 'qtci-windows-10_22H2-x86_64-50'
+    Compiler: 'MSVC2019'
+    Features: ['Packaging', 'Sccache', "DebugAndRelease", 'UseConfigure']
+    Configure arguments: '-debug-and-release -force-debug-info -headersclean -nomake examples -qt-zlib'
+    Environment variables: [
+        'CMAKE_ARGS=-DFEATURE_msvc_obj_debug_info=ON -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\.. -DPostgreSQL_ROOT={{.Env.POSTGRESQL_LIB_x64}}\..',
+        'LLVM_INSTALL_DIR={{.Env.LLVM_INSTALL_DIR_msvc}}',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR_MSVC}}',
+        'CONAN_PROFILE=coin/conan/profiles/ci-windows-x86_64-msvc2019_64',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_msvc}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_msvc}}',
+    ]
+-
+    Id: 'windows-11_22h2-msvc2019'
+    Template: 'qtci-windows-11_22H2-x86_64-50'
+    Compiler: 'MSVC2019'
+    Features: ['Packaging', 'Sccache', "DebugAndRelease", 'UseConfigure']
+    Configure arguments: '-debug-and-release -force-debug-info -headersclean -nomake examples -qt-zlib'
+    Environment variables: [
+        'CMAKE_ARGS=-DFEATURE_msvc_obj_debug_info=ON -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\.. -DPostgreSQL_ROOT={{.Env.POSTGRESQL_LIB_x64}}\..',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR_MSVC}}',
+        'LLVM_INSTALL_DIR={{.Env.LLVM_INSTALL_DIR_msvc}}',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_msvc}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_msvc}}',
+    ]
+-
+    Id: 'windows-10_22h2-msvc2022'
+    Template: 'qtci-windows-10_22H2-x86_64-50'
+    Compiler: 'MSVC2022'
+    Features: ['Sccache', "DebugAndRelease", 'UseConfigure']
+    Configure arguments: '-debug-and-release -force-debug-info -headersclean -nomake examples -qt-zlib'
+    Environment variables: [
+        'CMAKE_ARGS=-DFEATURE_msvc_obj_debug_info=ON -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\.. -DPostgreSQL_ROOT={{.Env.POSTGRESQL_LIB_x64}}\..',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR_MSVC}}',
+        'LLVM_INSTALL_DIR={{.Env.LLVM_INSTALL_DIR_msvc}}',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_msvc}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_msvc}}',
+    ]
+-
+    Id: 'windows-11_22h2-msvc2022'
+    Template: 'qtci-windows-11_22H2-x86_64-50'
+    Compiler: 'MSVC2022'
+    Features: ['Sccache', "DebugAndRelease", 'UseConfigure']
+    Configure arguments: '-debug-and-release -force-debug-info -headersclean -nomake examples -qt-zlib'
+    Environment variables: [
+        'CMAKE_ARGS=-DFEATURE_msvc_obj_debug_info=ON -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\.. -DPostgreSQL_ROOT={{.Env.POSTGRESQL_LIB_x64}}\..',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR_MSVC}}',
+        'LLVM_INSTALL_DIR={{.Env.LLVM_INSTALL_DIR_msvc}}',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_msvc}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_msvc}}',
+    ]
+-
+    Id: 'windows-10_22h2-msvc2019-developer-build'
+    Template: 'qtci-windows-10_22H2-x86_64-50'
+    Compiler: 'MSVC2019'
+    Features: ['Sccache', 'Conan', "DebugAndRelease", 'WarningsAreErrors', 'UseConfigure']
+    Configure arguments: '-debug-and-release -make examples -developer-build -force-debug-info -qt-zlib'
+    Environment variables: [
+        'CMAKE_ARGS=-DFEATURE_msvc_obj_debug_info=ON -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\..',
+        'CONAN_PROFILE=coin/conan/profiles/ci-windows-x86_64-msvc2019_64-developer',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR_MSVC}}',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_msvc}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_msvc}}',
+    ]
+-
+    Id: 'windows-10_22h2-msvc2019-arm64'
+    Template: 'qtci-windows-10_22H2-x86_64-50'
+    Compiler: 'MSVC2019'
+    Target arch: 'arm64'
+    Features: ['Sccache', 'DisableTests', 'TargetBuildOnly', 'Packaging', 'UseConfigure']
+    Platform dependency: 'windows-10_22h2-msvc2019-developer-build'
+    Environment variables: [
+        'TARGET_CONFIGURE_ARGS=-debug-and-release -force-debug-info -platform win32-arm64-msvc',
+        'TARGET_CMAKE_ARGS=-DFEATURE_msvc_obj_debug_info=ON -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_ROOT_DIR_x64_arm64}}',
+        'CONAN_HOST_PROFILE=coin/conan/profiles/ci-windows-x86_64-msvc2019_64-developer',
+        'CONAN_PROFILE=coin/conan/profiles/ci-windows-arm64-msvc2019_64',
+        'OPENSSL_CONF_x64={{.Env.OPENSSL_CONF_x64_arm64}}',
+        'OPENSSL_INCLUDE_x64={{.Env.OPENSSL_INCLUDE_x64_arm64}}',
+        'OPENSSL_LIB_x64={{.Env.OPENSSL_LIB_x64_arm64}}',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_msvc}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_msvc}}',
+    ]
+-
+    Id: 'windows-11_22h2-msvc2019-developer-build'
+    Template: 'qtci-windows-11_22H2-x86_64-50'
+    Compiler: 'MSVC2019'
+    Features: ['Sccache', "DebugAndRelease", 'WarningsAreErrors', 'UseConfigure']
+    Configure arguments: '-debug-and-release -make examples -developer-build -force-debug-info -qt-zlib -c++std c++20'
+    Environment variables: [
+        'CMAKE_ARGS=-DFEATURE_msvc_obj_debug_info=ON -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\..',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR_MSVC}}',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_msvc}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_msvc}}',
+    ]
+-
+    Id: 'windows-11_22h2-msvc2019-arm64'
+    Template: 'qtci-windows-11_22H2-x86_64-50'
+    Compiler: 'MSVC2019'
+    Target arch: 'arm64'
+    Features: ['Sccache', 'DisableTests', 'TargetBuildOnly', 'Packaging', 'UseConfigure']
+    Platform dependency: 'windows-11_22h2-msvc2019-developer-build'
+    Environment variables: [
+        'TARGET_CONFIGURE_ARGS=-debug-and-release -force-debug-info -platform win32-arm64-msvc',
+        'TARGET_CMAKE_ARGS=-DFEATURE_msvc_obj_debug_info=ON',
+        'CONAN_HOST_PROFILE=coin/conan/profiles/ci-windows-x86_64-msvc2019_64',
+        'CONAN_PROFILE=coin/conan/profiles/ci-windows-arm64-msvc2019_64',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_msvc}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_msvc}}',
+    ]
+-
+    Id: 'rhel-8.4'
+    Template: 'qtci-linux-RHEL-8.4-x86_64-50'
+    Compiler: 'GCC'
+    Features: ['Packaging', 'Sccache', 'UseConfigure', 'InstallQt5Dependencies']
+    Configure arguments: '-nomake examples -release -force-debug-info -headersclean -separate-debug-info -qt-libjpeg -qt-libpng -qt-pcre -qt-harfbuzz -qt-doubleconversion -no-libudev -bundled-xcb-xinput'
+    Environment variables: [
+        'CMAKE_ARGS=-DOpenGL_GL_PREFERENCE=LEGACY -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_HOME}}',
+        'CONAN_PROFILE=coin/conan/profiles/ci-linux-x86_64-gcc',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR}}'
+    ]
+-
+    Id: 'rhel-9.0'
+    Template: 'qtci-linux-RHEL-9.0-x86_64-50'
+    Compiler: 'GCC'
+    Features: ['Sccache', 'UseConfigure', 'InstallQt5Dependencies']
+    Configure arguments: '-nomake examples -release -force-debug-info -headersclean -separate-debug-info -qt-libjpeg -qt-libpng -qt-pcre -qt-harfbuzz -qt-doubleconversion -no-libudev -bundled-xcb-xinput'
+    Environment variables: [
+        'CMAKE_ARGS=-DOpenGL_GL_PREFERENCE=LEGACY',
+        'CONAN_PROFILE=coin/conan/profiles/ci-linux-x86_64-gcc',
+        'NON_QTBASE_CMAKE_ARGS=-DFFMPEG_DIR={{.Env.FFMPEG_DIR}}'
+    ]
+-
+    Id: 'ios-universal'
+    Template: 'qtci-macos-12-x86_64-105'
+    Target os: 'IOS_ANY'
+    Target arch: 'arm64'
+    Compiler: 'Clang'
+    Target compiler: 'Clang'
+    Platform dependency: 'macos-universal-on-x86_64'
+    Features: ['Packaging', 'Sccache', 'DebugAndRelease', 'DisableTests', 'UseConfigure']
+    Environment variables: [
+        'TARGET_CONFIGURE_ARGS=-debug-and-release -nomake examples -platform macx-ios-clang',
+        'CONAN_HOST_PROFILE=coin/conan/profiles/ci-macos-universal-clang',
+        'CONAN_PROFILE=coin/conan/profiles/ci-macos-ios-arm64-clang'
+    ]
+-
+    Id: 'windows-10_22h2-mingw11'
+    Template: 'qtci-windows-10_22H2-x86_64-50'
+    Compiler: 'Mingw'
+    Features: ['Packaging', 'Sccache', 'UseConfigure']
+    Configure arguments: '-release -force-debug-info -separate-debug-info -nomake examples -qt-zlib -qt-freetype -qt-libjpeg'
+    Environment variables: [
+        'Path={{.Env.MINGW1120}}\bin;{{.Env.Path}}',
+        'CMAKE_ARGS=-DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\.. -DPostgreSQL_ROOT={{.Env.POSTGRESQL_LIB_x64}}\..',
+        'NON_QTBASE_CMAKE_ARGS=-DFEATURE_system_tiff=OFF -DFFMPEG_DIR={{.Env.FFMPEG_DIR_MINGW}}',
+        'LLVM_INSTALL_DIR={{.Env.LLVM_INSTALL_DIR_mingw}}',
+        'CONAN_PROFILE=coin/conan/profiles/ci-windows-x86_64-mingw',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_mingw}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_mingw}}',
+    ]
+-
+    Id: 'windows-10_22h2-llvm'
+    Template: 'qtci-windows-10_22H2-x86_64-50'
+    Compiler: 'Clang'
+    Features: ['Sccache', 'UseConfigure']
+    Configure arguments: '-release -force-debug-info -separate-debug-info -nomake examples -qt-zlib -qt-freetype -qt-libjpeg'
+    Environment variables: [
+        'Path=C:\llvm-mingw\bin;{{.Env.Path}}',
+        'CMAKE_ARGS=-DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\.. -DPostgreSQL_ROOT={{.Env.POSTGRESQL_LIB_x64}}\..',
+        'NON_QTBASE_CMAKE_ARGS=-DFEATURE_system_tiff=OFF -DFFMPEG_DIR={{.Env.FFMPEG_DIR_LLVM_MINGW}}',
+        'LLVM_INSTALL_DIR=C:\llvm-mingw',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_llvm_mingw}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_llvm_mingw}}',
+    ]
+-
+    Id: 'windows-11_22h2-llvm'
+    Template: 'qtci-windows-11_22H2-x86_64-50'
+    Compiler: 'Clang'
+    Features: ['Sccache', 'UseConfigure']
+    Configure arguments: '-release -force-debug-info -separate-debug-info -nomake examples -qt-zlib -qt-freetype -qt-libjpeg'
+    Environment variables: [
+        'Path=C:\llvm-mingw\bin;{{.Env.Path}}',
+        'CMAKE_ARGS=-DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\.. -DPostgreSQL_ROOT={{.Env.POSTGRESQL_LIB_x64}}\..',
+        'NON_QTBASE_CMAKE_ARGS=-DFEATURE_system_tiff=OFF -DFFMPEG_DIR={{.Env.FFMPEG_DIR_LLVM_MINGW}}',
+        'LLVM_INSTALL_DIR=C:\llvm-mingw',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_llvm_mingw}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_llvm_mingw}}',
+    ]
+-
+    Id: 'windows-10_22h2-mingw11-developer-build'
+    Template: 'qtci-windows-10_22H2-x86_64-50'
+    Compiler: 'Mingw'
+    Features: ['Sccache', 'WarningsAreErrors', 'UseConfigure']
+    Configure arguments: '-developer-build -release -force-debug-info -separate-debug-info -make examples -qt-zlib -qt-freetype -qt-libjpeg'
+    Environment variables: [
+        'Path={{.Env.MINGW1120}}\bin;{{.Env.Path}}',
+        'CMAKE_ARGS=-DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\..',
+        'NON_QTBASE_CMAKE_ARGS=-DFEATURE_system_tiff=OFF -DFFMPEG_DIR={{.Env.FFMPEG_DIR_MINGW}}',
+        'LLVM_INSTALL_DIR={{.Env.LLVM_INSTALL_DIR_mingw}}',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_mingw}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_mingw}}',
+    ]
+-
+    Id: 'windows-11_22h2-mingw11-developer-build'
+    Template: 'qtci-windows-11_22H2-x86_64-50'
+    Compiler: 'Mingw'
+    Features: ['Sccache', 'WarningsAreErrors', 'UseConfigure']
+    Configure arguments: '-developer-build -release -force-debug-info -separate-debug-info -make examples -qt-zlib -qt-freetype -qt-libjpeg'
+    Environment variables: [
+        'Path={{.Env.MINGW1120}}\bin;{{.Env.Path}}',
+        'CMAKE_ARGS=-DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DOPENSSL_ROOT_DIR={{.Env.OPENSSL_INCLUDE_x64}}\..',
+        'NON_QTBASE_CMAKE_ARGS=-DFEATURE_system_tiff=OFF -DFFMPEG_DIR={{.Env.FFMPEG_DIR_MINGW}}',
+        'LLVM_INSTALL_DIR={{.Env.LLVM_INSTALL_DIR_mingw}}',
+        'Protobuf_ROOT={{.Env.Protobuf_ROOT_mingw}}',
+        'gRPC_ROOT={{.Env.gRPC_ROOT_mingw}}',
+    ]

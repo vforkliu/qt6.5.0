@@ -1,0 +1,121 @@
+// Copyright (C) 2023 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GFDL-1.3-no-invariants-only
+
+/*!
+    \example satelliteinfo
+    \title SatelliteInfo (QML)
+    \meta category {Positioning & Location}
+
+    \brief The SatelliteInfo example shows the available satellites
+    using Sky View or RSSI View and the user's current position. The satellites
+    currently contributing to the GPS fix are marked as pink.
+
+    \ingroup qtpositioning-examples
+
+    This example demonstrates the usage of \l {Qt Positioning QML Types}
+    {Qt Positioning QML API}:
+
+    \list
+        \li \l {PositionSource}
+        \li \l {SatelliteSource}
+    \endlist
+
+    The example shows satellite information in two different tabs.
+    The data is taken from the \l {SatelliteSource::satellitesInView} and
+    \l {SatelliteSource::satellitesInUse} properties.
+
+    \image ../images/example-skyview.png
+
+    The \e {Sky View} tab shows the relative satellite positions using the
+    \c {Azimuth} and \c {Elevation}
+    \l {geoSatelliteInfo::attribute}{attributes}.
+
+    \image ../images/example-rssiview.png
+
+    The RSSI View tab shows the signal strength of satellites in view using the
+    \l {geoSatelliteInfo::}{signalStrength} property.
+
+    In both cases, the displayed numbers are the individual
+    \l{geoSatelliteInfo::satelliteIdentifier}{satellite identifiers}. The
+    satellites that are currently used to calculate the GPS fix are marked pink.
+
+    The \e {Current Position} block below the satellite information uses
+    \l {PositionSource::position} property to show the current latitude and
+    longitude.
+
+    The \e {Status} block shows the current mode or the last error.
+
+    The application operates in three different modes:
+
+    \table
+        \header
+            \li Application mode
+            \li Description
+        \row
+            \li Running
+            \li The application continuously queries the system for satellite
+                and position updates. When new data is available it will be
+                displayed.
+        \row
+            \li Stopped
+            \li The application stops updating the satellite and position
+                information.
+        \row
+            \li Single
+            \li The application makes a single satellite and position update
+                request.
+    \endtable
+
+    The application automatically switches into a simulation mode if the
+    platform does not provide satellite or position information. The simulation
+    mode uses an \l {Qt Positioning NMEA plugin}{NMEA plugin} with pre-recorded
+    NMEA data.
+
+    \include examples-run.qdocinc
+
+    \section1 Retrieving Current Position
+
+    The current position is retrieved from the \l PositionSource QML object. The
+    \c {onPositionChanged} handler is used to receive position updates. The
+    string representations of latitude and longitude are extracted from the
+    \l {Position::}{coordinate} property.
+
+    \snippet satelliteinfo/Main.qml 3
+    \snippet satelliteinfo/Main.qml 4
+    \snippet satelliteinfo/Main.qml 5
+
+    \section1 Retrieving Satellite Information
+
+    Similarly to the position, the current satellite information is retrieved
+    from the \l SatelliteSource QML object. The \c {onSatellitesInViewChanged}
+    and \c {onSatellitesInUseChanged} handlers are used to get the updated
+    satellites in view and satellites in use respectively. The data is then
+    combined into a single model, which is passed to both \e {Sky View} and
+    \e {RSSI View} tabs.
+
+    \snippet satelliteinfo/Main.qml 0
+    \snippet satelliteinfo/Main.qml 1
+    \snippet satelliteinfo/Main.qml 2
+
+    \section1 QML Module Registration
+
+    \section2 CMake Build
+
+    For a CMake-based build, we need to add the following to the
+    \c {CMakeLists.txt}:
+
+    \quotefromfile satelliteinfo/CMakeLists.txt
+    \skipto qt_add_qml_module(satelliteinfo
+    \printuntil )
+
+    \section2 qmake Build
+
+    For a qmake build, we need to modify the \c {satelliteinfo.pro} file in the
+    following way:
+
+    \quotefromfile satelliteinfo/satelliteinfo.pro
+    \skipto CONFIG
+    \printuntil QML_IMPORT_MAJOR_VERSION
+    \skipto qml_resources.files
+    \printuntil RESOURCES += qml_resources
+*/
